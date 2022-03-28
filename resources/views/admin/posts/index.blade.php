@@ -2,13 +2,17 @@
 
 @section('content')
     <div class="container">
-
+        @if (session('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
         <table class="table">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Title</th>
-                    <th scope="col">Slug</th>
+                    <th scope="col">Data ultima modifica</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -19,10 +23,16 @@
                         <td>
                             <a href="{{ route('admin.posts.show', $post) }}">{{ $post->title }}</a>
                         </td>
-                        <td>{{ $post->slug }}</td>
-                        <td>
-                            <a class="btn btn-warning" href="">Edit</a>
-                            <a class="btn btn-danger" href="">Delete</a>
+                        <td>{{ date('F j Y g:i a', strtotime($post->updated_at)) }}</td>
+                        <td class="d-flex">
+                            <a class="btn btn-warning mr-2" href="">Edit</a>
+
+                            @include('includes.modal-confirm')
+                            {{-- <form action="{{ route('admin.posts.destroy', $post) }}" method="POST">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit" class="btn btn-danger" href="">Delete</button>
+                            </form> --}}
                         </td>
                     </tr>
 
