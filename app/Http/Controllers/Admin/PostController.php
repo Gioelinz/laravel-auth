@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -16,7 +17,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::paginate(10);
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -27,7 +28,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $post = new Post();
+        return view('admin.posts.create', compact('post'));
     }
 
     /**
@@ -78,9 +80,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -90,9 +92,29 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $request->validate(
+            [
+                'title' => ['required', 'string', Rule::unique('posts')->ignore($post->id), 'min:5', 'max:255'],
+                'image' => ['required', 'string', Rule::unique('posts')->ignore($post->id)],
+                'description' => 'required|string',
+            ],
+            [
+                'required' => 'Il campo :attribute è obbligatorio!',
+                'title.unique' => "Il Post $request->title è già esistente!",
+                'image.unique' => "Questa immagine è già stata inserita!",
+                'title.min' => "$request->title è lungo meno di 5 caratteri!"
+            ]
+        );
+
+        $data = $request->all();
+
+        $data['slug'] = Str::slug($request->title, '-');
+
+        $post->update($data);
+
+        return redirect()->route('admin.posts.index')->with('message', "$post->title modificato con successo");
     }
 
     /**

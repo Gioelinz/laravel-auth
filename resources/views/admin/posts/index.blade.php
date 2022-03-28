@@ -16,7 +16,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Title</th>
-                    <th scope="col">Data ultima modifica</th>
+                    <th scope="col">Last update</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -29,7 +29,8 @@
                         </td>
                         <td>{{ date('F j Y g:i a', strtotime($post->updated_at)) }}</td>
                         <td class="d-flex">
-                            <a class="btn btn-warning mr-2" href="">Edit</a>
+                            <a class="btn btn-warning mr-2" href="{{ route('admin.posts.edit', $post) }}"><i
+                                    class="fa-solid fa-pencil"></i></a>
 
                             @include('includes.modal-confirm')
                             {{-- <form action="{{ route('admin.posts.destroy', $post) }}" method="POST">
@@ -50,5 +51,6 @@
 
             </tbody>
         </table>
+        {{ $posts->links() }}
     </div>
 @endsection
