@@ -15,7 +15,7 @@
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                Sei Sicuro di Eliminare {{ $post->title }} ?
+                Sei Sicuro di Eliminare: <strong>{{ $post->title }}</strong> ?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Annulla</button>

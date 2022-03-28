@@ -7,6 +7,10 @@
                 {{ session('message') }}
             </div>
         @endif
+        <div class="d-flex justify-content-end">
+            <a href="{{ route('admin.posts.create') }}" class="btn btn-lg btn-success mb-2"><i
+                    class="fa-solid fa-plus mr-2"></i>Crea Post</a>
+        </div>
         <table class="table">
             <thead class="thead-dark">
                 <tr>
